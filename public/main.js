@@ -67,7 +67,7 @@
         });
 
         $('#puissance4 td').on('click', function (event) {
-            $.blockUI({message: '<h1>Just a moment...</h1>', css: { backgroundColor: '#f00', color: '#fff' } });
+            $.blockUI({message: '<h1>The other is playing...</h1>' });
             var colIndex = $(this).parent().children().index($(this));
             var rowIndex = $(this).parent().parent().children().index($(this).parent());
             console.log('Row: ' + rowIndex + ', Column: ' + colIndex);
@@ -124,12 +124,12 @@
 
         socket.on("game:win", function (data) {
             $.unblockUI();
-            $.blockUI({message: '<h1>WINNER</h1>', css: { backgroundColor: '#f00', color: '#fff' } });
+            $.blockUI({theme: true,title: 'WINNER', message: $('#endPrompt'), css: { backgroundColor: '#f00', color: '#fff' } });
         });
 
         socket.on("game:loose", function (data) {
             $.unblockUI();
-            $.blockUI({message: '<h1>LOOSER</h1>', css: { backgroundColor: '#f00', color: '#fff' } });
+            $.blockUI({theme: true, title: 'LOOSER', message: $('#endPrompt'), css: { backgroundColor: '#f00', color: '#fff' } });
         });
 
         socket.on("played", function (data) {

@@ -201,8 +201,6 @@ function onConnection(socket) {
           console.log('ON A UN GAGNANT !!');
           io.to(currentId).emit("game:win");
           io.to(nextId).emit("game:loose");
-          // player_1.emit("game:win");
-          // player_2.emit("game:loose");
           // stop();
         }
         return;
