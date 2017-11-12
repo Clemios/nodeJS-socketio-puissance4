@@ -114,6 +114,9 @@ var isDiagonalWinningMove = function (line, column, number) {
 
 var isWinningMove = function (line, column, number) {
   console.log('IS WINNING ??');
+  console.log(line, column, number);
+  console.log(isColumnWinningMove(line, column, number));
+  console.log(isLineWinningMove(line, column, number));
   return isColumnWinningMove(line, column, number) || isLineWinningMove(line, column, number) || isDiagonalWinningMove(line, column, number);
 };
 
@@ -175,6 +178,7 @@ function onConnection(socket) {
 
   socket.on('game:play', function (data) {
     var nextId = players.J.id == data.socketId ? players.R.id : players.J.id;
+    var currentId = players.J.id == data.socketId ? players.J.id : players.R.id;
     var nextPlayer = players.J.id == data.socketId ? 'R' : 'J';
     var currentPlayer = players.J.id == data.socketId ? 'J' : 'R';
 
@@ -189,11 +193,14 @@ function onConnection(socket) {
           nextPlayer: nextPlayer
         };
         console.log(MATRICE);
+        console.log("data.colPlayedAt", data)
         socket.emit("game:played", data);
         io.to(nextId).emit("game:newturn", data);
         // Detection du gagnant
-        if (isWinningMove(num, data.colPlayedAt, currentPlayer)) {
+        if (isWinningMove(num, data.column, data.player, data.nextPlayer)) {
           console.log('ON A UN GAGNANT !!');
+          io.to(currentId).emit("game:win");
+          io.to(nextId).emit("game:loose");
           // player_1.emit("game:win");
           // player_2.emit("game:loose");
           // stop();

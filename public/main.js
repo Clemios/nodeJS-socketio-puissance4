@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+    var name = prompt("Please enter a name:");
+    if( name === null || name === "" || name === "null" ) {
+        name = "Anonymous";
+    }
     var moi = undefined;
     var socket = undefined;
 
@@ -47,48 +51,23 @@
         return $($($('#puissance4').children().children()[line]).children()[column]).addClass("player_" + player);
     };
 
-    var uiLock = function (content) {
-        if (content == 'undefined') content = '';
-        $('div').attr('id', 'uiLockId').css({
-            'position': 'absolute',
-            'top': 0,
-            'left': 0,
-            'z-index': 1000,
-            'opacity': 0.6,
-            'width': '100%',
-            'height': '100%',
-            'color': 'white',
-            'background-color': 'black'
-        }).html(content).appendTo('body');
-    };
-    var uiUnlock = function () {
-        $('#uiLockId').remove();
-    };
-
     var initialize = function () {
         var start_button;
-        var play_button;
 
         socket = io.connect('http://localhost:3000');
         socket.emit('connectPlayer', {
-            name: "GRO"
+            name: name
         });
 
         start_button = $('#start');
-
-        play_button = $('#play');
 
         start_button.on('click', function (event) {
             clean();
             socket.emit('game:register', socket.id);
         });
 
-        play_button.on('click', function (event) {
-            socket.emit("game:play", socket.id);
-        });
-
         $('#puissance4 td').on('click', function (event) {
-            $.blockUI();
+            $.blockUI({message: '<h1>Just a moment...</h1>', css: { backgroundColor: '#f00', color: '#fff' } });
             var colIndex = $(this).parent().children().index($(this));
             var rowIndex = $(this).parent().parent().children().index($(this).parent());
             console.log('Row: ' + rowIndex + ', Column: ' + colIndex);
@@ -143,11 +122,19 @@
             return addMessage("Can't play here, try again.");
         });
 
+        socket.on("game:win", function (data) {
+            $.unblockUI();
+            $.blockUI({message: '<h1>WINNER</h1>', css: { backgroundColor: '#f00', color: '#fff' } });
+        });
+
+        socket.on("game:loose", function (data) {
+            $.unblockUI();
+            $.blockUI({message: '<h1>LOOSER</h1>', css: { backgroundColor: '#f00', color: '#fff' } });
+        });
 
         socket.on("played", function (data) {
             ennemy = data.player == "J" ? "R" : "J";
         });
-        socket.on("winner", function (data) {});
         socket.on("loser", function (data) {});
         socket.on('disconnect', function () {
             socket.disconnect();

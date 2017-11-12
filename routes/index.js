@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(app) {
     app.get('/', function(req, res, next) {
-        res.render('game', { title: 'Game'});
+        res.render('game', { title: 'Puissance 4'});
       });
 };
