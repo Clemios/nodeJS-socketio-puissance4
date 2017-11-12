@@ -34,7 +34,7 @@ var players = {
     name: undefined,
     status: undefined,
   },
-  SPECTATORS: [],
+  OTHERS: {},
 };
 
 var turn_to = "J";
@@ -122,32 +122,40 @@ var isWinningMove = function (line, column, number) {
 
 function onConnection(socket) {
   socket.on("connectPlayer", function (data) {
+      socket.player_name = data.name;
+      newPlayer = {name:data.name, status: "connected"}
+      players.OTHERS[socket.id] = newPlayer;
+      //players.OTHERS.push(newPlayer);
+      console.log("PLAYERS", players);
+  });
+
+  socket.on('game:register', function (data) {
+    // Enregistrement du premier joueur
+
     if (players.J.id == undefined) {
       // Initialisation du joueur Jaune
       socket.player = "J";
       socket.player_name = data.name;
       players.J.id = socket.id;
-      players.J.name = data.name;
-      players.J.status = "connected"
+      players.J.name = players.OTHERS[socket.id].name;
+      players.OTHERS[socket.id].status = "playing"
+      players.J.status = "registred"
     } else if (players.R.id == undefined) {
       // Initialisation du joueur Rouge
       socket.player = "R";
       socket.player_name = data.name;
       players.R.id = socket.id;
-      players.R.name = data.name;
-      players.R.status = "connected"
+      players.R.name = players.OTHERS[socket.id].name;
+      players.OTHERS[socket.id].status = "playing"
+      players.R.status = "registred"
 
-    } else {
-      console.log(players);
+    } else if (players.R.id && players.J.id){
+      console.log('GAME IS RUNNING PLEASE WAIT');
     }
-  });
-
-  socket.on('game:register', function (data) {
-    // Enregistrement du premier joueur
-    var nextPlayer = players.J.id == data ? players.R : players.J;
-    var nextPlayerPosition = players.J.id == data ? 'R' : 'J';
-    var currentPlayer = players.J.id == data ? players.J : players.R;
-    var currentPlayerPosition = players.J.id == data ? 'J' : 'R';
+    var nextPlayer = players.J.id == data.id ? players.R : players.J;
+    var nextPlayerPosition = players.J.id == data.id ? 'R' : 'J';
+    var currentPlayer = players.J.id == data.id ? players.J : players.R;
+    var currentPlayerPosition = players.J.id == data.id ? 'J' : 'R';
     currentPlayer.status = "registered";
     socket.emit('game:registered', {currentPlayerPosition, currentPlayerName: currentPlayer.name});
     // Tentative de gestion des parties pour forcer la présence de 2 joueurs
@@ -212,13 +220,9 @@ function onConnection(socket) {
     console.log(MATRICE);
   });
 
-  function sendGameData() {
-    socket.emit("played", {
-      matrice: MATRICE,
-      player: socket.player
-    });
-    //  sendDataToSpectators();
-  }
+  socket.on('disconnect', function () {
+    io.sockets.emit('disconnect');
+  });
 }
 
 

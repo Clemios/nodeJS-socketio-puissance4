@@ -5,7 +5,6 @@
     if( name === null || name === "" || name === "null" ) {
         name = "Anonymous";
     }
-    var moi = undefined;
     var socket = undefined;
 
     var addMessage = function (content) {
@@ -59,6 +58,7 @@
         var start_button;
 
         socket = io.connect('http://localhost:3000');
+        setMyName(name);
         socket.emit('connectPlayer', {
             name: name
         });
@@ -67,7 +67,7 @@
 
         start_button.on('click', function (event) {
             clean();
-            socket.emit('game:register', socket.id);
+            socket.emit('game:register', {id:socket.id});
         });
 
         $('#puissance4 td').on('click', function (event) {
@@ -84,7 +84,7 @@
 
         socket.on('game:registered', function (data) {
             addMessage("You're registered.");
-            return setMyName(data.currentPlayerName), setMyColor(data.currentPlayerPosition);
+            return setMyColor(data.currentPlayerPosition);
         });
 
         socket.on("game:pleaseRegister", function (data) {
@@ -140,7 +140,7 @@
         socket.on("played", function (data) {
             ennemy = data.player == "J" ? "R" : "J";
         });
-        socket.on("loser", function (data) {});
+
         socket.on('disconnect', function () {
             socket.disconnect();
             setTimeout(function () {
@@ -149,13 +149,5 @@
         })
     };
     $(document).ready(initialize());
-
-
-    function sendGameData() {
-        socket.emit("played", {
-            matrice: MATRICE,
-            player: socket.player
-        });
-    }
 
 })();
