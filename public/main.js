@@ -119,6 +119,7 @@
         });
 
         socket.on("game:box_not_available", function () {
+            $.unblockUI();
             return addMessage("Can't play here, try again.");
         });
 
