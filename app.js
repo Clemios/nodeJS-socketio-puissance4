@@ -149,7 +149,8 @@ function onConnection(socket) {
     var currentPlayer = players.J.id == data ? players.J : players.R;
     var currentPlayerPosition = players.J.id == data ? 'J' : 'R';
     currentPlayer.status = "registered";
-    socket.emit('game:registered', currentPlayerPosition);
+    socket.emit('game:registered', {currentPlayerPosition, currentPlayerName: currentPlayer.name});
+    // Tentative de gestion des parties pour forcer la présence de 2 joueurs
     if (nextPlayer.status !== "registered") {
       // Dans l'attente du second joueur
       io.to(nextPlayer.id).emit("game:pleaseRegister", {

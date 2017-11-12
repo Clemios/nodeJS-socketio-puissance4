@@ -16,6 +16,10 @@
         return $('#iam').addClass("player_" + position);
     };
 
+    var setMyName = function (name) {
+        return $('#myname').html(name);
+    };
+
     var setCurrentPlayer = function (position) {
         return $('#who_plays').attr('class', "player_" + position);
     };
@@ -80,7 +84,7 @@
 
         socket.on('game:registered', function (data) {
             addMessage("You're registered.");
-            return setMyColor(data);
+            return setMyName(data.currentPlayerName), setMyColor(data.currentPlayerPosition);
         });
 
         socket.on("game:pleaseRegister", function (data) {
