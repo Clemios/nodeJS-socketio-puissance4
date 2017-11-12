@@ -1,0 +1,17 @@
+{
+  "name": "puissance4",
+  "version": "1.0.0",
+  "description": "Un puissance 4 réalisé lors d'un cour de NodeJS",
+  "main": "app.js",
+  "dependencies": {
+    "express": "~4.15.5",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "socket.io": "latest"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Clément Fleury",
+  "license": "MIT"
+}

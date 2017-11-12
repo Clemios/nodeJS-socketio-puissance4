@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <!-- <link rel="stylesheet" href="./css/game.css" />-->
+  <!--<link rel="stylesheet" href="./css/bootstrap-theme.css" />-->
+ <!-- <link rel="stylesheet" href="./css/bootstrap.css" />-->
+  <!--<link rel="stylesheet" href="front/css/animate.css">-->
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="//malsup.github.io/jquery.blockUI.js"></script>
+  <!-- <link rel="stylesheet" href="style.css"> -->
+      <style type="text/css">
+      body {
+        font-family: "Lucida Grande";
+      }
+
+      #puissance4 {
+        border-collapse: collapse;
+      }
+
+      #puissance4 td, #iam, #who_plays {
+        background-image: url("images/p4_empty.png");
+        height: 97px;
+        width: 97px;
+      }
+
+      #puissance4 td.player_R, #iam.player_R, #who_plays.player_R {
+        background-image: url("images/p4_player_1.png");
+      }
+
+      #puissance4 td.player_J, #iam.player_J, #who_plays.player_J {
+        background-image: url("images/p4_player_2.png");
+      }
+
+      #messages {
+        border-bottom: 1px solid #ccc;
+        font-size: 0.8em;
+        position: absolute;
+        top: 10px;
+        left: 720px;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        max-height: 450px;
+        overflow-y: auto;
+      }
+
+      #messages li {
+        border: 1px solid #ccc;
+        border-bottom: none;
+        padding: 0.5em 1em;
+      }
+
+      #messages li:nth-of-type(odd) {
+        background-color: #eee;
+      }
+
+      #informations {
+        position: absolute;
+        left: 920px;
+        top: 10px;
+      }
+
+      #informations td {
+        text-align: right;
+      }
+    </style>
+</head>
+<body>
+    <div ng-view class="settings" autoscroll="true" about="" ></div>
